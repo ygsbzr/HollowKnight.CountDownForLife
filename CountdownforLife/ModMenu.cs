@@ -32,7 +32,14 @@ namespace CountdownforLife
                 ()=>(int)CountdownforLife.GS.mode,
                 Id:"CountdownMode"
                 ),
-                
+                new CustomSlider("Time to live Minute",
+                (f)=>{CountdownforLife.GS.minute=(int)f;CountDownTimer.timer=0; },
+                ()=>(int)CountdownforLife.GS.minute,
+                Id:"CountDownTTLMinute"
+                )
+                {
+                    wholeNumbers=true,minValue=0,maxValue=300
+                },
                  new HorizontalOption("PunishmentMode","Choose how it works",
                 Enum.GetNames(typeof(Punishmode)).ToArray(),
                 (s) =>
@@ -42,17 +49,10 @@ namespace CountdownforLife
                 ()=>(int)CountdownforLife.GS.punish,
                 Id:"CountdownPunishMode"
                 ),
-                new CustomSlider("Time to live Minute",
-                (f)=>{CountdownforLife.GS.minute=(int)f;CountDownTimer.timer=0; },
-                ()=>(float)CountdownforLife.GS.minute,
-                Id:"CountDownTTLMinute"
-                )
-                {
-                    wholeNumbers=true,minValue=0,maxValue=300
-                },
+                
                 new CustomSlider("Time to live Second",
                 (f)=>{CountdownforLife.GS.second=(int)f;CountDownTimer.timer=0; },
-                ()=>(float)CountdownforLife.GS.second,
+                ()=>(int)CountdownforLife.GS.second,
                 Id:"CountDownTTLSecond"
                 )
                 {

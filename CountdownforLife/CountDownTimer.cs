@@ -2,6 +2,7 @@
 using MagicUI.Elements;
 using GlobalEnums;
 using Modding;
+using System.Collections;
 namespace CountdownforLife
 {
     public class CountDownTimer:MonoBehaviour
@@ -31,8 +32,12 @@ namespace CountdownforLife
         {
             if(HeroController.instance != null)
             {
+                if((HeroController.instance.cState.superDashing||HeroController.instance.cState.superDashOnWall)&&!HeroController.instance.cState.transitioning)
+                {
+                    return false;
+                }
                 if(GameManager.instance.GetSceneNameString() == "Menu_Title" ||
-                GameManager.instance.IsNonGameplayScene()||GameManager.instance.IsGamePaused()||!HeroController.instance.acceptingInput)
+                GameManager.instance.IsNonGameplayScene()||GameManager.instance.IsGamePaused()||HeroController.instance.cState.transitioning)
                 {
                     return true;
                 }
@@ -53,9 +58,8 @@ namespace CountdownforLife
             if (Ispause()||!CountdownforLife.GS.timestart)
                 return;
             timer += Time.deltaTime;
-            if(timer>CountdownforLife.GS.TTL)
+            if(timer>=CountdownforLife.GS.TTL-1)
             {
-                timer = 0;
                 CountdownforLife.GS.timestart = false;
                 if(CountdownforLife.GS.punish==Punishmode.Die)
                 {
@@ -63,12 +67,13 @@ namespace CountdownforLife
                 }
                 else
                 {
-                    TelePort();
+                    StartCoroutine(TelePort());
                 }
                 if(CountdownforLife.GS.mode==Mode.EachRoom||CountdownforLife.GS.mode==Mode.All)
                 {
                     CountdownforLife.GS.timestart = true;
                 }
+                timer = 0;
             }
         }
         public void UpdateDisplayer()
@@ -95,8 +100,9 @@ namespace CountdownforLife
                 }
             }
         }
-        private void TelePort()
+        private IEnumerator TelePort()
         {
+            yield return new WaitUntil(() => !HeroController.instance.cState.hazardDeath&&!HeroController.instance.cState.transitioning);
             HeroController.instance.IgnoreInputWithoutReset();
             HeroController.instance.CancelSuperDash();
             ReflectionHelper.SetField(HeroController.instance, "airDashed", false);
@@ -128,6 +134,33 @@ namespace CountdownforLife
                     AlwaysUnloadUnusedAssets = true
                 });
             }
+            if (CountdownforLife.GS.punish == Punishmode.TelePortToBlueLake)
+            {
+                GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo
+                {
+                    SceneName = "Crossroads_50",
+                    HeroLeaveDirection = GatePosition.left,
+                    EntryDelay = 0,
+                    EntryGateName = "right1",
+                    WaitForSceneTransitionCameraFade = false,
+                    Visualization = 0,
+                    AlwaysUnloadUnusedAssets = true
+                });
+            }
+            if (CountdownforLife.GS.punish == Punishmode.TelePortToPOP)
+            {
+                GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo
+                {
+                    SceneName = "White_Palace_18",
+                    HeroLeaveDirection = GatePosition.left,
+                    EntryDelay = 0,
+                    EntryGateName = "right1",
+                    WaitForSceneTransitionCameraFade = false,
+                    Visualization = 0,
+                    AlwaysUnloadUnusedAssets = true
+                });
+            }
+            
         }
     }
 }

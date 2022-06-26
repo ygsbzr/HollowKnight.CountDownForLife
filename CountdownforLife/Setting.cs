@@ -25,7 +25,9 @@ namespace CountdownforLife
     {
         Die,
         TeleportToHG,
-        TeleportToTown
+        TeleportToTown,
+        TelePortToBlueLake,
+        TelePortToPOP
     }
    
 }
