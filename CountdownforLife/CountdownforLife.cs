@@ -9,7 +9,7 @@ namespace CountdownforLife
         public static GameObject timerGO = null;
         public override string GetVersion()
         {
-            return "1.3";
+            return "1.4";
         }
         public override void Initialize()
         {
