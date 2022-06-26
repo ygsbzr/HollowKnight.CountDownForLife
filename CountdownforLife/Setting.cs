@@ -15,6 +15,7 @@ namespace CountdownforLife
         Pantheon,
         BossStatue,
         EachRoom,
+        All,
         None
     }
    

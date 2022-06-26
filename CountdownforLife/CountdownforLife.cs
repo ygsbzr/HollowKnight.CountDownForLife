@@ -9,7 +9,7 @@ namespace CountdownforLife
         public static GameObject timerGO = null;
         public override string GetVersion()
         {
-            return "1.0";
+            return "1.2";
         }
         public override void Initialize()
         {
@@ -24,6 +24,17 @@ namespace CountdownforLife
                 UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneCheck;
                 On.BossSceneController.Start += Check;
                 On.BossSceneController.EndBossScene += StopBossTimer;
+                On.HeroController.Start += Checkall;
+            }
+        }
+
+        private void Checkall(On.HeroController.orig_Start orig, HeroController self)
+        {
+            orig(self);
+            if(GS.mode==Mode.All)
+            {
+                GS.timestart = true;
+                CountDownTimer.timer = 0f;
             }
         }
 
@@ -55,16 +66,16 @@ namespace CountdownforLife
                 if(arg1.name== "GG_Workshop")
                 {
                     GS.timestart = true;
-
+                    CountDownTimer.timer = 0;
                 }
                 if(GGNotHG.Contains(arg1.name))
                 {
                     GS.timestart = false;
-                    CountDownTimer.timer = 0;
                 }
             }
             if(GS.mode==Mode.EachRoom)
             {
+                GS.timestart=true;
                 CountDownTimer.timer = 0;
             }
         }
