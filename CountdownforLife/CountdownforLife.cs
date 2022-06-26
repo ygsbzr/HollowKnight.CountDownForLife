@@ -9,7 +9,7 @@ namespace CountdownforLife
         public static GameObject timerGO = null;
         public override string GetVersion()
         {
-            return "1.2";
+            return "1.3";
         }
         public override void Initialize()
         {
@@ -76,6 +76,11 @@ namespace CountdownforLife
             if(GS.mode==Mode.EachRoom)
             {
                 GS.timestart=true;
+                CountDownTimer.timer = 0;
+            }
+            if(GS.mode==Mode.None)
+            {
+                GS.timestart = false;
                 CountDownTimer.timer = 0;
             }
         }
